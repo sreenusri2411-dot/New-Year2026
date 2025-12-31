@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>New Year Surprise</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+
+body{
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  perspective:1200px;
+  background:
+    radial-gradient(circle at top, #46367c, #21212c 80%);
+  color:#fff;
+}
+
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle, rgba(251, 249, 249, 0.12) 1px, transparent 0.1px);
+  background-size:60px 60px;
+  animation:stars 40s linear infinite;
+  z-index:-1;
+}
+
+@keyframes stars{
+  from{transform:translateY(0)}
+  to{transform:translateY(-200px)}
+}
+
+/* ---------- Screens ---------- */
+.screen{
+  display:none;
+  width:100%;
+  max-width:420px;
+  padding:20px;
+  text-align:center;
+  opacity:0;
+  transform:rotateY(90deg);
+  transition:1s;
+}
+.screen.active{
+  display:block;
+  opacity:1;
+  transform:rotateY(0deg);
+}
+
+/* ---------- Card ---------- */
+.card{
+  background:rgba(255,255,255,0.05);
+  border-radius:20px;
+  padding:25px;
+  box-shadow:0 0 30px rgba(255,105,180,.2);
+}
+
+/* ---------- Screen 1 ---------- */
+.heart{
+  width:80px;height:80px;
+  background:#ff4f9a;
+  margin:30px auto;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:35px;
+  animation:pulse 1.5s infinite;
+  cursor:pointer;
+}
+@keyframes pulse{50%{transform:scale(1.2)}}
+
+/* ---------- Screen 2 ---------- */
+.focus-area{
+  position:relative;
+  width:320px;
+  height:420px;
+  margin:auto;
+  border-radius:28px;
+  background:rgba(255,255,255,0.03);
+  backdrop-filter:blur(12px);
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+}
+.focus-area h2{margin:20px 0}
+
+.gift{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  width:80px;height:80px;
+  background:#ff4f9a;
+  border-radius:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:36px;
+  box-shadow:0 0 40px rgba(255,79,154,.8);
+  transition:.6s;
+  cursor:pointer;
+}
+.gift.show{transform:translate(-50%,-50%) scale(1)}
+
+.card-item{
+  position:absolute;
+  width:110px;
+  height:140px;
+  border-radius:22px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  cursor:grab;
+  box-shadow:0 15px 40px rgba(0,0,0,.35);
+  user-select:none;
+  touch-action:none;
+  background:radial-gradient(circle,#fff,#ff4f9a,transparent);
+}
+.card-item span{font-size:22px;margin-bottom:6px}
+
+.distance{background:#f80ac0;top:80px;left:20px}
+.stress{background:#4986dc;top:80px;right:20px}
+.work{background:#5bdbdb;bottom:40px;left:20px}
+.bad{background:#e7438a;bottom:40px;right:20px}
+
+.removed{
+  opacity:0;
+  transform:scale(.6) translateY(150px);
+  pointer-events:none;
+}
+
+/* ---------- Screen 3 : Cube ---------- */
+.cube-scene{
+  width:220px;height:220px;
+  margin:40px auto;
+  perspective:1000px;
+}
+.cube{
+  width:120px;height:120px;
+  position:absolute;
+  top:50%;left:50%;
+  transform-style:preserve-3d;
+  transform:translate(-50%,-50%);
+  animation:spin 6s linear infinite;
+  cursor:pointer;
+}
+@keyframes spin{
+  from{transform:translate(-50%,-50%) rotateX(0) rotateY(0)}
+  to{transform:translate(-50%,-50%) rotateX(360deg) rotateY(360deg)}
+}
+.face{
+  position:absolute;
+  width:120px;height:120px;
+  background:linear-gradient(135deg,#ff4f9a,#b57cff);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  border-radius:18px;
+  box-shadow:0 0 40px rgba(255,79,154,.7);
+}
+.front{transform:translateZ(60px)}
+.back{transform:rotateY(180deg) translateZ(60px)}
+.right{transform:rotateY(90deg) translateZ(60px)}
+.left{transform:rotateY(-90deg) translateZ(60px)}
+.top{transform:rotateX(90deg) translateZ(60px)}
+.bottom{transform:rotateX(-90deg) translateZ(60px)}
+
+.light-burst{
+  position:absolute;
+  top:50%;left:50%;
+  width:10px;height:10px;
+  border-radius:50%;
+  background:radial-gradient(circle,#fff,#ff4f9a,transparent);
+  transform:translate(-50%,-50%);
+  opacity:0;
+}
+.light-burst.active{
+  animation:burst 1s ease-out;
+}
+@keyframes burst{
+    from{width:10px;height:10px;opacity:1;}
+  to{width:500px;height:500px;opacity:0}
+}
+
+/* ---------- Other Screens ---------- */
+.photo,.greeting-card,.book{
+  background:#fff;
+  color:#000;
+  border-radius:20px;
+  padding:15px;
+}
+button{
+  margin-top:20px;
+  padding:10px 20px;
+  border:none;
+  border-radius:20px;
+  background:#ff4f9a;
+  color:#fff;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<audio autoplay loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
+
+<!-- SCREEN 1 -->
+<div class="screen active">
+  <div class="card">
+    <h2>A little surprise</h2>
+    <p>Tap & hold</p>
+    <div class="heart" id="holdBtn">❤</div>
+  </div>
+</div>
+
+<!-- SCREEN 2 -->
+<div class="screen">
+  <div class="focus-area">
+    <h2>Move distractions</h2>
+
+    <div class="gift" id="gift">🎁</div>
+
+    <div class="card-item distance"><span>📍</span>Distance</div>
+    <div class="card-item stress"><span>🧠</span>Stress</div>
+    <div class="card-item work"><span>💼</span>Work</div>
+    <div class="card-item bad"><span>🌧</span>Bad Days</div>
+  </div>
+</div>
+
+<!-- SCREEN 3 -->
+<div class="screen">
+  <h2>Tap the cube</h2>
+  <div class="cube-scene">
+    <div class="cube" onclick="openCube()">
+      <div class="face front">💖</div>
+      <div class="face back">✨</div>
+      <div class="face right">🎉</div>
+      <div class="face left">🌟</div>
+      <div class="face top">🎁</div>
+      <div class="face bottom">💫 </div>
+    </div>
+    <div class="light-burst" id="lightBurst"></div>
+  </div>
+</div>
+
+<!-- SCREEN 4 -->
+<div class="screen">
+  <h2>Memories</h2>
+  <div class="photo" style="position:relative; width:300px; height:400px; margin:auto;">
+    <img src="C:/Users/HP/Downloads/New folder/589106449_1159197279526948_8032286678740862986_n.png"
+         alt="Back Image"
+         style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:20px; z-index:1;">
+    <input type="checkbox" id="toggleImg" style="display:none;">
+    <label for="toggleImg" style="cursor:pointer;">
+      <img src="C:/Users/HP/Downloads/New folder/553230280_2944233172454409_7722408367669106286_n.jpg" 
+           alt="Front Image"
+           style="position:absolute; bottom:20px; left:50%; transform:translateX(-50%); width:160px; border-radius:15px; z-index:2; transition:opacity 0.3s;">
+    </label>
+    <img src="C:/Users/HP/Downloads/New folder/605608968_2395258724253423_1425011821050342100_n.png" 
+         alt="Front Image 2"
+         style="position:absolute; bottom:20px; left:50%; transform:translateX(-50%); width:160px; border-radius:15px; z-index:2; opacity:0; transition:opacity 0.3s;"
+         id="img2">
+    <style>
+      #toggleImg:checked + label + #img2 { opacity: 1; }
+      #toggleImg:checked + label { opacity: 0; }
+    </style>
+  </div>
+  <button onclick="next()">Next</button>
+</div>
+
+<!-- SCREEN 5 -->
+<div class="screen">
+  <h2>Greeting</h2>
+  <div class="greeting-card">
+    <div class="card-inner">
+      <div class="card-front">
+        💌 Happy New Year Papa
+      </div>
+      <div class="card-back">
+        🎉 Wishing you joy, peace & love 💖
+      </div>
+    </div>
+  </div>
+  <button onclick="next()">Next</button>
+</div>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<style>
+.greeting-card { perspective: 1000px; width: 300px; height: 180px; margin: 20px auto; cursor: pointer; }
+.card-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 1s; }
+.greeting-card:hover .card-inner { transform: rotateY(180deg); }
+.card-front, .card-back { position: absolute; width: 100%; height: 100%; border-radius: 20px; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 500; box-shadow: 0 15px 40px rgba(0,0,0,0.4); color: #fff; }
+.card-front { background: linear-gradient(135deg,#ff4f9a,#b57cff); }
+.card-back { background: linear-gradient(135deg,#4fd1ff,#7f5cff); transform: rotateY(180deg); }
+.card-front::after, .card-back::after { content:''; position:absolute; width:100%; height:100%; top:-50%; left:-50%; background:radial-gradient(circle, rgba(255,255,255,0.3) 1%, transparent 2%); background-size:10px 10px; animation: sparkle 2s linear infinite; border-radius:50%; }
+@keyframes sparkle { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
+</style>
+
+<!-- SCREEN 6 -->
+<div class="screen">
+  <h2>Message</h2>
+  <div class="book">Happy New Year 2026 to my amazing sister! May your year be filled with endless joy, new adventures, and all the success you deserve, bringing you closer to your dreams and filled with love and cherished memories as you paint your own beautiful future.  💖</div>
+  <button onclick="next()">Next</button>
+</div>
+
+<!-- SCREEN 7 (Video) -->
+<div class="screen">
+  <h2>Celebrate!</h2>
+  <div style="width:100%; max-width:420px; margin:auto; border-radius:20px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,0.4);">
+    <video width="100%" controls autoplay loop>
+      <source src="C:\Users\HP\Downloads\New folder\Untitled design.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</div>
+
+<script>
+let screens=document.querySelectorAll('.screen');
+let index=0;
+
+function next(){
+  screens[index].classList.remove('active');
+  index++;
+  if(index >= screens.length) index = screens.length-1; // Prevent overflow
+  screens[index].classList.add('active');
+}
+
+/* Hold heart */
+let timer;
+const holdBtn=document.getElementById('holdBtn');
+holdBtn.onmousedown=()=>timer=setTimeout(next,800);
+holdBtn.onmouseup=()=>clearTimeout(timer);
+
+/* Drag cards */
+const cards=document.querySelectorAll('.card-item');
+const gift=document.getElementById('gift');
+let removed=0;
+
+cards.forEach(card=>{
+  let sx=0,sy=0,dx=0,dy=0,drag=false;
+
+  card.addEventListener('pointerdown',e=>{
+    drag=true;
+    sx=e.clientX;
+    sy=e.clientY;
+    card.setPointerCapture(e.pointerId);
+  });
+
+  card.addEventListener('pointermove',e=>{
+    if(!drag) return;
+    dx=e.clientX-sx;
+    dy=e.clientY-sy;
+    card.style.transform=`translate(${dx}px,${dy}px) rotate(${dx*0.1}deg)`;
+  });
+
+  card.addEventListener('pointerup',()=>{
+    drag=false;
+    if(Math.abs(dx)>120 || Math.abs(dy)>120){
+      card.classList.add('removed');
+      removed++;
+      if(removed===cards.length){
+        setTimeout(()=>gift.classList.add('show'),400);
+      }
+    }else{
+      card.style.transform='';
+    }
+    dx=dy=0;
+  });
+});
+
+gift.onclick=next;
+
+/* Cube */
+function openCube(){
+  document.querySelector('.cube').style.animation='none';
+  document.getElementById('lightBurst').classList.add('active');
+  setTimeout(next,900);
+}
+</script>
+ 
+</body>
+</html>
